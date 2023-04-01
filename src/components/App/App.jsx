@@ -12,33 +12,16 @@ export const App = () => {
   const [filter, setFilter] = useState('');
 
   const addContact = newContact => {
-    if (
-      !contacts.find(
-        contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
-      )
-    ) {
-      setContacts(prevState => [...prevState, newContact]);
-    } else {
-      alert(`${newContact.name} is already in contacts`);
-    }
+    setContacts(prevState => [...prevState, newContact]);
   };
-
-  
-  
 
   const findContact = e => {
     setFilter(e.target.value);
   };
 
-  const onFilterContacts = () => {
-    const filterValue = filter.toLowerCase();
-    return filter
-      ? contacts.filter(contact =>
-          contact.name.toLowerCase().includes(filterValue)
-        )
-      : contacts;
-  };
-  
+  const onFilterContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
 
   const deleteContact = contactID => {
     setContacts(() => contacts.filter(contact => contact.id !== contactID));
@@ -47,7 +30,7 @@ export const App = () => {
   return (
     <div>
       <Title>Phonebook</Title>
-      <ContactForm onSubmit={addContact} />
+      <ContactForm onSubmit={addContact} contacts={contacts} />
 
       <Subtitle>Contacts</Subtitle>
       <Filter value={filter} onChange={findContact} />

@@ -5,8 +5,19 @@ import { nanoid } from 'nanoid';
 
 const initialValues = { name: '', number: '' };
 
-export const ContactForm = ({ onSubmit }) => {
+export const ContactForm = ({ onSubmit, contacts }) => {
   const handleSubmit = (values, { resetForm }) => {
+    const newName = values.name;
+    if (
+      contacts.find(
+        contact => contact.name.toLowerCase() === newName.toLowerCase()
+      )
+    ) {
+      alert(`${newName} is already in contacts`);
+      resetForm();
+      return;
+    }
+
     onSubmit({
       id: nanoid(),
       ...values,
