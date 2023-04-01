@@ -1,20 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ContactForm } from 'components/ContactForm/ContactForm';
 import { ContactList } from 'components/ContactList/ContactList';
 import { Filter } from 'components/Filter/Filter';
+import { useLocalStorage } from 'hooks/useLocalStorage';
 
 import initialContacts from '../../data.json';
 import { Title, Subtitle } from './App.styled';
 
 export const App = () => {
-  const [contacts, setContacts] = useState(
-    () => JSON.parse(window.localStorage.getItem('contacts')) ?? initialContacts
-  );
+  const [contacts, setContacts] = useLocalStorage('contacts', initialContacts);
   const [filter, setFilter] = useState('');
-
-  useEffect(() => {
-    window.localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
 
   const addContact = newContact => {
     if (
@@ -28,6 +23,9 @@ export const App = () => {
     }
   };
 
+  
+  
+
   const findContact = e => {
     setFilter(e.target.value);
   };
@@ -40,11 +38,10 @@ export const App = () => {
         )
       : contacts;
   };
+  
 
   const deleteContact = contactID => {
-    setContacts(prevState =>
-      prevState.filter(contact => contact.id !== contactID)
-    );
+    setContacts(() => contacts.filter(contact => contact.id !== contactID));
   };
 
   return (
